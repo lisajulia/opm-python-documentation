@@ -1,0 +1,14 @@
+# Files necessary to build the documentation locally, but these are tracked by other github repositories
+dune.module
+python/docstrings_common.json
+python/docstrings_simulators.json
+
+# Python sphinx build
+python/sphinx_docs/docs/_build*
+
+# Python cache directories
+**/__pycache__/
+
+# Editor autosave files
+*~
+*.swp
