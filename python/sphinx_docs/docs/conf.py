@@ -34,7 +34,7 @@ import sys
 # opm.simulators.BlackOilSimulator Python module will also have access to the docstrings.)
 sys.path.insert(0, os.path.abspath("../src"))
 # Our sphinx extension that will use the docstrings.json file to generate documentation
-extensions = ["opm_simulators_docs.sphinx_ext_docstrings"]
+extensions = ["opm_python_docs.sphinx_ext_docstrings"]
 # Path to docstrings.json
 opm_simulators_docstrings_path = os.path.abspath('../../docstrings_simulators.json')
 opm_common_docstrings_path = os.path.abspath('../../docstrings_common.json')
@@ -50,7 +50,7 @@ html_static_path = ["_static"]
 html_context = {
     "display_github": True,
     "github_user": "OPM",
-    "github_repo": "opm-simulators",
+    "github_repo": "opm-python-documentation",
     "github_version": "master",
     "conf_py_path": "/python/docs/",
 }
