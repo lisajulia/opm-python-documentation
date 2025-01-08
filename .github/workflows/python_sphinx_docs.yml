@@ -25,7 +25,7 @@ jobs:
         - name: Get docstrings_common.json from master branch of opm-simulators
           run: |
             curl -L -o python/docstrings_simulators.json https://raw.githubusercontent.com/OPM/opm-simulators/master/python/docstrings_simulators.json
-        - name: Get dune.module from master branch of opm-simulators
+        - name: Get dune.module from master branch of opm-simulators, this is needed for the call to extract_opm_simulators_release in python/sphinx_docs/docs/conf.py.
           run: |
             curl -L -o dune.module https://raw.githubusercontent.com/OPM/opm-simulators/master/dune.module
         - name: Set up Python

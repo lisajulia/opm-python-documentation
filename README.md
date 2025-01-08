@@ -1,9 +1,7 @@
 # Repository to host the Python documentation for OPM Flow
 
 ## Building the documentation locally
-- Copy [docstrings_simulators.json](https://raw.githubusercontent.com/OPM/opm-simulators/master/python/docstrings_simulators.json) to the python folder
-- Copy [docstrings_common.json](https://raw.githubusercontent.com/OPM/opm-common/master/python/docstrings_common.json) to the python folder
-- Copy [dune.module](https://raw.githubusercontent.com/OPM/opm-simulators/master/dune.module) to the root folder (opm-python-documentation)
+Follow the commands in .github/workflows/python_sphinx_docs.yml for your local setup!
 
 ## Building the documentation online on your fork
 - Turn on github actions at `https://github.com/<your-github-username>/opm-python-documentation/actions`
