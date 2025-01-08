@@ -3,6 +3,8 @@
 ## Building the documentation locally
 Follow the commands in .github/workflows/python_sphinx_docs.yml for your local setup!
 
+See the script [scripts/download_files.py](https://github.com/OPM/opm-python-documentation/blob/master/scripts/download_files.py) for more information.
+
 ## Building the documentation online on your fork
 - Turn on github actions at `https://github.com/<your-github-username>/opm-python-documentation/actions`
 - Push any changes to a branch of your fork, this should trigger a build of the documentation, where the built documentation is pushed to the branch `gh-pages-<name-of-your-branch>`
