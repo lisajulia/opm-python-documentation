@@ -1,9 +1,9 @@
 # Repository to host the Python documentation for OPM Flow
 
 ## Building the documentation locally
-Follow the commands in .github/workflows/python_sphinx_docs.yml for your local setup!
+Follow the commands in `.github/workflows/python_sphinx_docs.yml` for your local setup!
 
-See the script [scripts/download_files.py](https://github.com/OPM/opm-python-documentation/blob/master/scripts/download_files.py) for more information.
+See also the script [opmdoc-download-files](https://github.com/OPM/opm-python-documentation/blob/master/python/sphinx_docs/README.md) for more information.
 
 ## Building the documentation online on your fork
 - Turn on github actions at `https://github.com/<your-github-username>/opm-python-documentation/actions`
