@@ -34,15 +34,13 @@ def download_docstring_file(url: str) -> None:
     print(f"Downloading docstrings file from {repo} repository. "
            "Should we use the master branch or a PR branch?")
     branch = input("Enter 'master' or a PR number: ")
-    if branch == "master":
-        url = url.replace("master", branch)
-    else:
+    if branch != "master":
         pr_number = branch
         if not pr_number.isdigit():
             print("Invalid PR number.")
             return
         commit_hash = convert_pr_to_commit_hash(repo, pr_number)
-        url = url.replace("master", commit_hash)
+        url = url.replace("/master/", f"/{commit_hash}/")
     logging.info(f"Downloading docstrings file from {url}")
     response = requests.get(url)
     response.raise_for_status()  # Raises 404 if the file is not found
