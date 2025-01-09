@@ -2,30 +2,15 @@
 
 import logging
 import requests
-import subprocess
-from pathlib import Path
 
 import click
+
+from opm_python_docs import helpers
 
 URL_SIMULATORS = "https://raw.githubusercontent.com/OPM/opm-simulators/master/python/docstrings_simulators.json"
 URL_COMMON = "https://raw.githubusercontent.com/OPM/opm-common/master/python/docstrings_common.json"
 URL_DUNE_MODULE = "https://raw.githubusercontent.com/OPM/opm-simulators/master/dune.module"
 
-def get_git_root() -> Path:
-    """Return the absolute path of the opm-python-documentation repository's root."""
-    try:
-        output = subprocess.check_output(
-            ["git", "rev-parse", "--show-toplevel"],
-            stderr=subprocess.STDOUT
-        )
-    except subprocess.CalledProcessError:
-        # Handle the error if we're not inside a Git repo, etc.
-        raise RuntimeError("Not a valid Git repository or other error occurred.")
-    # Check that the parent directory is the opm-python-documentation repository
-    root = output.decode("utf-8").strip()
-    if not root.endswith("opm-python-documentation"):
-        raise RuntimeError("Not in the opm-python-documentation repository.")
-    return Path(root)
 
 def convert_pr_to_commit_hash(repo: str, pr_number: int) -> str:
     """Convert a PR number to a commit hash."""
@@ -49,7 +34,7 @@ def download_docstring_file(url: str, pr_number: int|None) -> None:
     logging.info(f"Downloading docstrings file from {url}")
     response = requests.get(url)
     response.raise_for_status()  # Raises 404 if the file is not found
-    git_root_dir = get_git_root()
+    git_root_dir = helpers.get_git_root()
     save_path = git_root_dir / "python" / filename
     with open(str(save_path), "wb") as file:
         file.write(response.content)
@@ -60,7 +45,7 @@ def download_dune_module() -> None:
     logging.info("Downloading dune.module file")
     response = requests.get(URL_DUNE_MODULE)
     response.raise_for_status()
-    git_root_dir = get_git_root()
+    git_root_dir = helpers.get_git_root()
     save_path = git_root_dir / "dune.module"
     with open(save_path, "wb") as file:
         file.write(response.content)
