@@ -8,8 +8,9 @@ def read_doc_strings(directive, docstrings_path):
     print(docstrings_path)
     with open(docstrings_path, 'r') as file:
         docstrings = json.load(file)
+    sorted_docstrings = sorted(docstrings.items(), key=lambda item: item[1].get('signature', item[0]))
     result = []
-    for name, item in docstrings.items():
+    for name, item in sorted_docstrings:
         # Create a ViewList instance for the function signature and docstring
         rst = ViewList()
 
