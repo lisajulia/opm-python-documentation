@@ -10,3 +10,10 @@ docs:
 
 view-docs:
 	@xdg-open "file://$(GIT_ROOT)/python/sphinx_docs/docs/_build/$(CURRENT_BRANCH)/index.html"
+
+test:
+	pytest tests/
+
+coverage:
+	coverage run -m pytest tests
+	coverage report -m
