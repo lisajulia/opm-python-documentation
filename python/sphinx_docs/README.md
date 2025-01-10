@@ -30,6 +30,9 @@ After installation, you can run the following scripts:
 # Downloads docstrings JSON files and dune.module file before building the documentation locally
 $ opmdoc-download-files
 # Generate the documentation
-$ make
-# View the generated documentation in the browser
+$ make docs
+# View the generated documentation for the current branch in the browser
+$ make view-docs
+# Or for a specific branch
+$ opmdoc-view-doc --branch=master
 ```
