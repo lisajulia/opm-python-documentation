@@ -19,15 +19,18 @@ jobs:
           uses: actions/checkout@v4
           with:
             fetch-depth: 0   # Fetch all history for all tags and branches
+        - name: Create tmp directories for master
+          run: |
+            mkdir python/master-tmp
         - name: Get docstrings_common.json from master branch of opm-common
           run: |
-            curl -L -o python/docstrings_common.json https://raw.githubusercontent.com/OPM/opm-common/master/python/docstrings_common.json
+            curl -L -o python/master-tmp/docstrings_common.json https://raw.githubusercontent.com/OPM/opm-common/master/python/docstrings_common.json
         - name: Get docstrings_common.json from master branch of opm-simulators
           run: |
-            curl -L -o python/docstrings_simulators.json https://raw.githubusercontent.com/OPM/opm-simulators/master/python/docstrings_simulators.json
+            curl -L -o python/master-tmp/docstrings_simulators.json https://raw.githubusercontent.com/OPM/opm-simulators/master/python/docstrings_simulators.json
         - name: Get dune.module from master branch of opm-simulators, this is needed for the call to extract_opm_simulators_release in python/sphinx_docs/docs/conf.py.
           run: |
-            curl -L -o dune.module https://raw.githubusercontent.com/OPM/opm-simulators/master/dune.module
+            curl -L -o python/master-tmp/dune.module https://raw.githubusercontent.com/OPM/opm-simulators/master/dune.module
         - name: Set up Python
           uses: actions/setup-python@v5
           with:
@@ -44,18 +47,18 @@ jobs:
             mkdir gh-pages
             touch gh-pages/.nojekyll
             cd sphinx_docs
-            # Currently we build only docs for the HEAD of the master branch
-            # Later we can add release tags to the list to get the docs for the releases
-            # For example: -b "master, release/2024.04/final" will build the docs for
-            # the master branch and the release/2024.04/final tag
-            # For the releases, we create snapshots of the docstrings_common.json and docstrings_simulators.json
-            # and take the ones tracked by git, only for the master, we take the current ones we fetched
-            # in steps 2 and 3 of this workflow
-
+            # To add a new relase to this build system:
+            # - add the respective branch <your-new-release> on this repository, replace the slashes "/" by dashes "-"
+            #   (slashes mess with the navigation html created by sphinx-versioned)
+            # - take a snapshot of https://raw.githubusercontent.com/OPM/opm-common/<your-new-release>/python/docstrings_common.json,
+            #   https://raw.githubusercontent.com/OPM/opm-simulators/<your-new-release>/python/docstrings_simulators.json and
+            #   https://raw.githubusercontent.com/OPM/opm-simulators/<your-new-release>/dune.module and put them
+            #   in the python folder on that branch
+            # - add the respective branch <your-new-release> in the command below
             if [ "${{ github.ref_name }}" == "master" ]; then
-              poetry run sphinx-versioned -m master -b "master" --force --git-root ../../
+              poetry run sphinx-versioned -m master -b "master release-2025.04" --force --git-root ../../
             else
-              poetry run sphinx-versioned -m master -b "master ${{ github.ref_name }}" --force --git-root ../../
+              poetry run sphinx-versioned -m master -b "${{ github.ref_name }} master release-2025.04" --force --git-root ../../
             fi
         - name: Copy documentation to gh-pages
           run: |
@@ -68,7 +71,7 @@ jobs:
             branch: gh-pages
             folder: python/gh-pages
         - name: Deploy documentation for other branches (on forks)
-          if: github.event_name == 'push' && github.ref != 'refs/heads/master'
+          if: github.event_name == 'push' && github.ref != 'refs/heads/master' && !startsWith(github.ref, 'refs/heads/release')
           uses: OPM/github-pages-deploy-action@releases/v4
           with:
             branch: gh-pages-${{ github.ref_name }}

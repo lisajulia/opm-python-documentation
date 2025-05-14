@@ -1,23 +1,38 @@
 # Configuration file for the Sphinx documentation builder.
 
+import os
+import subprocess
+
 project = "OPM Python Documentation"
 copyright = "2024 Equinor ASA"
 author = "Håkon Hægland"
 
-# Function to extract release version from dune.module file
-def extract_opm_simulators_release():
-    version_file_path = '../../../dune.module'
-    with open(version_file_path, 'r') as file:
-        for line in file:
-            if line.startswith('Version:'):
-                version_string = line.split(':')[1].strip()
-                return version_string
-    return "unknown"  # Fallback version
+def get_git_branch():
+    try:
+        return subprocess.check_output(["git", "rev-parse", "--abbrev-ref", "HEAD"]).decode("utf-8").strip()
+    except Exception:
+        return "unknown"
 
-release = extract_opm_simulators_release()
+# Function to extract release version from dune.module file
+def extract_opm_simulators_release(version_file_path):
+    try:
+        with open(version_file_path, 'r') as file:
+            for line in file:
+                if line.startswith('Version:'):
+                    version_string = line.split(':')[1].strip()
+                    return version_string
+    except Exception:
+        return "unknown"  # Fallback version
+
+branch = get_git_branch()
+print(branch)
+if branch == "master":
+    prefix = "../../master-tmp"
+else:
+    prefix = "../../"
+release = extract_opm_simulators_release(os.path.join(prefix, "dune.module"))
 
 # -- General configuration ---------------------------------------------------
-import os
 import sys
 
 # For regular Python packages, the path to the package is usually added to sys.path
@@ -35,9 +50,10 @@ import sys
 sys.path.insert(0, os.path.abspath("../src"))
 # Our sphinx extension that will use the docstrings.json file to generate documentation
 extensions = ["opm_python_docs.sphinx_ext_docstrings"]
+
 # Path to docstrings.json
-opm_simulators_docstrings_path = os.path.abspath('../../docstrings_simulators.json')
-opm_common_docstrings_path = os.path.abspath('../../docstrings_common.json')
+opm_simulators_docstrings_path = os.path.abspath(os.path.join(prefix, "docstrings_simulators.json"))
+opm_common_docstrings_path = os.path.abspath(os.path.join(prefix, "docstrings_common.json"))
 
 templates_path = ["_templates"]
 exclude_patterns = ["_build", "Thumbs.db", ".DS_Store"]

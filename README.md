@@ -11,6 +11,7 @@ See also the script [opmdoc-download-files](https://github.com/OPM/opm-python-do
 
 ## Building the documentation online on your fork
 - Turn on github actions at `https://github.com/<your-github-username>/opm-python-documentation/actions`
+- Add the docstrings_common.json and docstrings_simulators.json file you want to test to the python folder
 - Push any changes to a branch of your fork, this should trigger a build of the documentation, where the built documentation is pushed to the branch `gh-pages-<name-of-your-branch>`
 - Then you can turn on github pages for your fork at `https://github.com/<your-github-username>/opm-python-documentation/settings/pages`
 - Select the branch `gh-pages-<name-of-your-branch>` as the source for your github page
